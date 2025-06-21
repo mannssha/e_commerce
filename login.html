@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - VOGUEVAGUE</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    body {
+      background: url('https://source.unsplash.com/1600x900/?fashion,store') no-repeat center center/cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      position: relative;
+    }
+    
+    .login-container {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.25);
+      width: 380px;
+      text-align: center;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    
+    .brand {
+      font-size: 32px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      color: #ff5e62;
+      font-family: 'Georgia', serif;
+      letter-spacing: 2px;
+    }
+    
+    .tagline {
+      font-style: italic;
+      color: #666;
+      margin-bottom: 20px;
+    }
+    
+    h2 {
+      margin-bottom: 15px;
+      color: #333;
+    }
+    
+    .input-group {
+      position: relative;
+      margin-bottom: 15px;
+    }
+    
+    .input-group input {
+      width: 100%;
+      padding: 12px 40px 12px 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+      transition: border 0.3s ease;
+    }
+    
+    .input-group input:focus {
+      outline: none;
+      border-color: #ff5e62;
+      box-shadow: 0 0 5px rgba(255, 94, 98, 0.3);
+    }
+    
+    .input-group i {
+      position: absolute;
+      right: 15px;
+      top: 15px;
+      color: #666;
+    }
+    
+    .forgot-password {
+      display: block;
+      text-align: right;
+      margin: 5px 0 15px;
+      color: #666;
+      font-size: 14px;
+      text-decoration: none;
+    }
+    
+    .forgot-password:hover {
+      color: #ff5e62;
+    }
+    
+    .remember-me {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    
+    .remember-me input {
+      margin-right: 10px;
+      width: auto;
+    }
+    
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #ff5e62;
+      border: none;
+      color: white;
+      font-size: 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    button:hover {
+      background: #e04a4f;
+    }
+    
+    .buttons-container {
+      margin-top: 20px;
+    }
+    
+    .social-login {
+      margin-top: 20px;
+      border-top: 1px solid #eee;
+      padding-top: 20px;
+    }
+    
+    .social-login p {
+      margin-bottom: 15px;
+      color: #666;
+    }
+    
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+    
+    .social-icons a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #f1f1f1;
+      color: #333;
+      font-size: 18px;
+      transition: all 0.3s ease;
+    }
+    
+    .social-icons a:hover {
+      transform: translateY(-3px);
+    }
+    
+    .social-icons a.facebook:hover {
+      background: #3b5998;
+      color: white;
+    }
+    
+    .social-icons a.google:hover {
+      background: #dd4b39;
+      color: white;
+    }
+    
+    .social-icons a.twitter:hover {
+      background: #00acee;
+      color: white;
+    }
+    
+    .signup-link {
+      margin-top: 20px;
+      display: block;
+      color: #666;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    
+    .signup-link span {
+      color: #ff5e62;
+      font-weight: bold;
+    }
+    
+    .signup-link span:hover {
+      text-decoration: underline;
+    }
+    
+    .language-selector {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      color: white;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 5px 10px;
+      border-radius: 15px;
+      cursor: pointer;
+    }
+    
+    .language-options {
+      position: absolute;
+      top: 45px;
+      right: 15px;
+      background: white;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      display: none;
+      z-index: 100;
+    }
+    
+    .language-options a {
+      display: block;
+      padding: 10px 20px;
+      text-decoration: none;
+      color: #333;
+    }
+    
+    .language-options a:hover {
+      background: #f1f1f1;
+    }
+    
+    .toggle-form {
+      background: none;
+      border: none;
+      color: #ff5e62;
+      cursor: pointer;
+      margin-top: 10px;
+      font-size: 14px;
+      text-decoration: underline;
+    }
+    
+    #registerForm {
+      display: none;
+    }
+    
+    .error-message {
+      color: #e04a4f;
+      font-size: 14px;
+      margin-top: 5px;
+      display: none;
+      text-align: left;
+    }
+    
+    .password-strength {
+      height: 5px;
+      margin-top: 5px;
+      border-radius: 3px;
+      background: #ddd;
+      position: relative;
+      display: none;
+    }
+    
+    .password-strength-bar {
+      height: 100%;
+      border-radius: 3px;
+      width: 0%;
+      transition: width 0.5s, background 0.5s;
+    }
+    
+    #countdown {
+      display: none;
+      margin-top: 10px;
+      color: #666;
+    }
+    
+    .loader {
+      display: none;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #ff5e62;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 10px;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .dark-mode {
+      position: absolute;
+      bottom: 15px;
+      left: 15px;
+      color: white;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 5px 10px;
+      border-radius: 15px;
+      cursor: pointer;
+    }
+    
+    body.dark {
+      background: url('https://source.unsplash.com/1600x900/?fashion,night') no-repeat center center/cover;
+    }
+    
+    body.dark .login-container {
+      background: rgba(40, 40, 40, 0.95);
+      color: #f1f1f1;
+    }
+    
+    body.dark h2, body.dark .brand {
+      color: #ff8a8d;
+    }
+    
+    body.dark input {
+      background: #333;
+      color: #f1f1f1;
+      border-color: #555;
+    }
+    
+    body.dark .forgot-password, body.dark .signup-link {
+      color: #aaa;
+    }
+    
+    body.dark .social-icons a {
+      background: #444;
+      color: #f1f1f1;
+    }
+    
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 20px;
+      border-radius: 5px;
+      color: white;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      transform: translateX(150%);
+      transition: transform 0.5s ease;
+      z-index: 1000;
+    }
+    
+    .notification.show {
+      transform: translateX(0);
+    }
+    
+    .notification.success {
+      background: #4CAF50;
+    }
+    
+    .notification.error {
+      background: #f44336;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 480px) {
+      .login-container {
+        width: 90%;
+        padding: 25px;
+      }
+      
+      .brand {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="language-selector">
+    <i class="fas fa-globe"></i> EN
+  </div>
+  <div class="language-options">
+    <a href="#" data-lang="en">English</a>
+    <a href="#" data-lang="fr">Français</a>
+    <a href="#" data-lang="es">Español</a>
+    <a href="#" data-lang="de">Deutsch</a>
+  </div>
+  
+  <div class="dark-mode">
+    <i class="fas fa-moon"></i> Dark Mode
+  </div>
+  
+  <div class="login-container">
+    <div class="brand">VOGUEVAGUE</div>
+    <div class="tagline">Redefining Fashion, One Style at a Time</div>
+    
+    <div id="loginSection">
+      <h2>Login</h2>
+      <form id="loginForm">
+        <div class="input-group">
+          <input type="email" id="loginEmail" placeholder="Email" required />
+          <i class="fas fa-envelope"></i>
+        </div>
+        <div class="error-message" id="loginEmailError">Please enter a valid email address</div>
+        
+        <div class="input-group">
+          <input type="password" id="loginPassword" placeholder="Password" required />
+          <i class="fas fa-eye" id="togglePassword"></i>
+        </div>
+        <div class="error-message" id="loginPasswordError">Password is required</div>
+        
+        <div class="remember-me">
+          <input type="checkbox" id="rememberMe" />
+          <label for="rememberMe">Remember me</label>
+        </div>
+        
+        <a href="#" class="forgot-password" id="forgotPasswordLink">Forgot Password?</a>
+        
+        <div class="buttons-container">
+          <div class="loader" id="loginLoader"></div>
+          <button type="submit" id="loginButton">Login</button>
+        </div>
+      </form>
+      
+      <div class="social-login">
+        <p>Or log in with</p>
+        <div class="social-icons">
+          <a href="#" class="facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="google"><i class="fab fa-google"></i></a>
+          <a href="#" class="twitter"><i class="fab fa-twitter"></i></a>
+        </div>
+      </div>
+      
+      <a href="signup.html" class="signup-link">
+        Don't have an account? <span>Sign up</span>
+      </a>
+      
+    
+    <div id="registerSection" style="display: none;">
+      <h2>Create Account</h2>
+      <form id="registerForm">
+        <div class="input-group">
+          <input type="text" id="registerName" placeholder="Full Name" required />
+          <i class="fas fa-user"></i>
+        </div>
+        <div class="error-message" id="registerNameError">Please enter your full name</div>
+        
+        <div class="input-group">
+          <input type="email" id="registerEmail" placeholder="Email" required />
+          <i class="fas fa-envelope"></i>
+        </div>
+        <div class="error-message" id="registerEmailError">Please enter a valid email address</div>
+        
+        <div class="input-group">
+          <input type="password" id="registerPassword" placeholder="Password" required />
+          <i class="fas fa-eye" id="toggleRegisterPassword"></i>
+        </div>
+        <div class="error-message" id="registerPasswordError">Password must be at least 8 characters</div>
+        <div class="password-strength">
+          <div class="password-strength-bar"></div>
+        </div>
+        
+        <div class="input-group">
+          <input type="password" id="confirmPassword" placeholder="Confirm Password" required />
+          <i class="fas fa-lock"></i>
+        </div>
+        <div class="error-message" id="confirmPasswordError">Passwords do not match</div>
+        
+        <div class="remember-me">
+          <input type="checkbox" id="termsAgree" required />
+          <label for="termsAgree">I agree to the <a href="#" id="termsLink">Terms & Conditions</a></label>
+        </div>
+        <div class="error-message" id="termsError">You must agree to the terms</div>
+        
+        <div class="buttons-container">
+          <div class="loader" id="registerLoader"></div>
+          <button type="submit" id="registerButton">Create Account</button>
+        </div>
+      </form>
+      
+      <a href="#" class="signup-link" id="showLogin">Already have an account? <span>Log in</span></a>
+    </div>
+    
+    <div id="forgotPasswordSection" style="display: none;">
+      <h2>Reset Password</h2>
+      <p style="margin-bottom: 20px; color: #666;">Enter your email address and we'll send you a link to reset your password.</p>
+      
+      <form id="forgotPasswordForm">
+        <div class="input-group">
+          <input type="email" id="resetEmail" placeholder="Email" required />
+          <i class="fas fa-envelope"></i>
+        </div>
+        <div class="error-message" id="resetEmailError">Please enter a valid email address</div>
+        
+        <div id="countdown"></div>
+        
+        <div class="buttons-container">
+          <div class="loader" id="resetLoader"></div>
+          <button type="submit" id="resetButton">Send Reset Link</button>
+        </div>
+      </form>
+      
+      <a href="#" class="signup-link" id="backToLogin">Back to <span>Login</span></a>
+    </div>
+  </div>
+  
+  <div class="notification" id="notification"></div>
+  
+  <script>
+    // Toggle password visibility
+    document.getElementById("togglePassword").addEventListener("click", function() {
+      const password = document.getElementById("loginPassword");
+      if (password.type === "password") {
+        password.type = "text";
+        this.classList.replace("fa-eye", "fa-eye-slash");
+      } else {
+        password.type = "password";
+        this.classList.replace("fa-eye-slash", "fa-eye");
+      }
+    });
+    
+    document.getElementById("toggleRegisterPassword").addEventListener("click", function() {
+      const password = document.getElementById("registerPassword");
+      if (password.type === "password") {
+        password.type = "text";
+        this.classList.replace("fa-eye", "fa-eye-slash");
+      } else {
+        password.type = "password";
+        this.classList.replace("fa-eye-slash", "fa-eye");
+      }
+    });
+    
+
+    
+    document.getElementById("showLogin").addEventListener("click", function(e) {
+      e.preventDefault();
+      document.getElementById("loginSection").style.display = "block";
+      document.getElementById("registerSection").style.display = "none";
+      document.getElementById("forgotPasswordSection").style.display = "none";
+    });
+    
+    document.getElementById("forgotPasswordLink").addEventListener("click", function(e) {
+      e.preventDefault();
+      document.getElementById("loginSection").style.display = "none";
+      document.getElementById("registerSection").style.display = "none";
+      document.getElementById("forgotPasswordSection").style.display = "block";
+    });
+    
+    document.getElementById("backToLogin").addEventListener("click", function(e) {
+      e.preventDefault();
+      document.getElementById("loginSection").style.display = "block";
+      document.getElementById("registerSection").style.display = "none";
+      document.getElementById("forgotPasswordSection").style.display = "none";
+    });
+    
+    // Password strength meter
+    document.getElementById("registerPassword").addEventListener("input", function() {
+      const password = this.value;
+      const strengthBar = document.querySelector(".password-strength-bar");
+      const strengthContainer = document.querySelector(".password-strength");
+      
+      if (password.length > 0) {
+        strengthContainer.style.display = "block";
+        
+        // Calculate strength
+        let strength = 0;
+        if (password.length >= 8) strength += 25;
+        if (password.match(/[A-Z]/)) strength += 25;
+        if (password.match(/[0-9]/)) strength += 25;
+        if (password.match(/[^A-Za-z0-9]/)) strength += 25;
+        
+        strengthBar.style.width = strength + "%";
+        
+        if (strength <= 25) {
+          strengthBar.style.background = "#f44336"; // Red
+        } else if (strength <= 50) {
+          strengthBar.style.background = "#ffa726"; // Orange
+        } else if (strength <= 75) {
+          strengthBar.style.background = "#ffeb3b"; // Yellow
+        } else {
+          strengthBar.style.background = "#4caf50"; // Green
+        }
+      } else {
+        strengthContainer.style.display = "none";
+      }
+    });
+    
+    // Form validation
+    document.getElementById("loginForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      
+      let isValid = true;
+      const email = document.getElementById("loginEmail").value;
+      const password = document.getElementById("loginPassword").value;
+      
+      // Reset error messages
+      document.getElementById("loginEmailError").style.display = "none";
+      document.getElementById("loginPasswordError").style.display = "none";
+      
+      // Email validation
+      if (!validateEmail(email)) {
+        document.getElementById("loginEmailError").style.display = "block";
+        isValid = false;
+      }
+      
+      // Password validation
+      if (password.length === 0) {
+        document.getElementById("loginPasswordError").style.display = "block";
+        isValid = false;
+      }
+      
+      if (isValid) {
+        // Show loading indicator
+        document.getElementById("loginButton").disabled = true;
+        document.getElementById("loginLoader").style.display = "block";
+        
+        // Simulate API call with timeout
+        setTimeout(function() {
+          const users = JSON.parse(localStorage.getItem("users")) || [];
+          const match = users.find(user => user.email === email && user.password === password);
+          
+          document.getElementById("loginLoader").style.display = "none";
+          document.getElementById("loginButton").disabled = false;
+          
+          if (match) {
+            // Save to session if "remember me" is checked
+            if (document.getElementById("rememberMe").checked) {
+              localStorage.setItem("currentUser", JSON.stringify({
+                name: match.name,
+                email: match.email,
+                lastLogin: new Date().toISOString()
+              }));
+            } else {
+              sessionStorage.setItem("currentUser", JSON.stringify({
+                name: match.name,
+                email: match.email,
+                lastLogin: new Date().toISOString()
+              }));
+            }
+            
+            showNotification("Login successful! Redirecting...", "success");
+            
+            // Redirect after notification
+            setTimeout(function() {
+              window.location.href = "index.html";
+            }, 1500);
+          } else {
+            showNotification("Invalid email or password.", "error");
+          }
+        }, 1500);
+      }
+    });
+    
+    document.getElementById("registerForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      
+      let isValid = true;
+      const name = document.getElementById("registerName").value;
+      const email = document.getElementById("registerEmail").value;
+      const password = document.getElementById("registerPassword").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
+      const termsAgreed = document.getElementById("termsAgree").checked;
+      
+      // Reset error messages
+      document.getElementById("registerNameError").style.display = "none";
+      document.getElementById("registerEmailError").style.display = "none";
+      document.getElementById("registerPasswordError").style.display = "none";
+      document.getElementById("confirmPasswordError").style.display = "none";
+      document.getElementById("termsError").style.display = "none";
+      
+      // Name validation
+      if (name.length < 3) {
+        document.getElementById("registerNameError").style.display = "block";
+        isValid = false;
+      }
+      
+      // Email validation
+      if (!validateEmail(email)) {
+        document.getElementById("registerEmailError").style.display = "block";
+        isValid = false;
+      }
+      
+      // Password validation
+      if (password.length < 8) {
+        document.getElementById("registerPasswordError").style.display = "block";
+        isValid = false;
+      }
+      
+      // Confirm password
+      if (password !== confirmPassword) {
+        document.getElementById("confirmPasswordError").style.display = "block";
+        isValid = false;
+      }
+      
+      // Terms agreement
+      if (!termsAgreed) {
+        document.getElementById("termsError").style.display = "block";
+        isValid = false;
+      }
+      
+      if (isValid) {
+        // Show loading indicator
+        document.getElementById("registerButton").disabled = true;
+        document.getElementById("registerLoader").style.display = "block";
+        
+        // Simulate API call with timeout
+        setTimeout(function() {
+          // Check if email already exists
+          const users = JSON.parse(localStorage.getItem("users")) || [];
+          const emailExists = users.some(user => user.email === email);
+          
+          document.getElementById("registerLoader").style.display = "none";
+          document.getElementById("registerButton").disabled = false;
+          
+          if (emailExists) {
+            showNotification("This email address is already registered.", "error");
+          } else {
+            // Store user data
+            users.push({
+              name: name,
+              email: email,
+              password: password,
+              registrationDate: new Date().toISOString()
+            });
+            
+            localStorage.setItem("users", JSON.stringify(users));
+            
+            showNotification("Account created successfully! You can now log in.", "success");
+            
+            // Clear form and switch to login
+            document.getElementById("registerForm").reset();
+            setTimeout(function() {
+              document.getElementById("showLogin").click();
+            }, 1500);
+          }
+        }, 1500);
+      }
+    });
+    
+    document.getElementById("forgotPasswordForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      
+      let isValid = true;
+      const email = document.getElementById("resetEmail").value;
+      
+      // Reset error messages
+      document.getElementById("resetEmailError").style.display = "none";
+      
+      // Email validation
+      if (!validateEmail(email)) {
+        document.getElementById("resetEmailError").style.display = "block";
+        isValid = false;
+      }
+      
+      if (isValid) {
+        // Show loading indicator
+        document.getElementById("resetButton").disabled = true;
+        document.getElementById("resetLoader").style.display = "block";
+        
+        // Simulate API call with timeout
+        setTimeout(function() {
+          const users = JSON.parse(localStorage.getItem("users")) || [];
+          const userExists = users.some(user => user.email === email);
+          
+          document.getElementById("resetLoader").style.display = "none";
+          
+          if (userExists) {
+            document.getElementById("resetButton").disabled = true;
+            showNotification("Password reset link sent to your email.", "success");
+            
+            // Show countdown for resending
+            const countdownElement = document.getElementById("countdown");
+            countdownElement.style.display = "block";
+            let timeLeft = 60;
+            
+            countdownElement.textContent = `You can request another reset link in ${timeLeft} seconds`;
+            
+            const countdownInterval = setInterval(function() {
+              timeLeft--;
+              countdownElement.textContent = `You can request another reset link in ${timeLeft} seconds`;
+              
+              if (timeLeft <= 0) {
+                clearInterval(countdownInterval);
+                countdownElement.style.display = "none";
+                document.getElementById("resetButton").disabled = false;
+                document.getElementById("resetButton").textContent = "Send Reset Link";
+              }
+            }, 1000);
+          } else {
+            document.getElementById("resetButton").disabled = false;
+            showNotification("Email not found in our records.", "error");
+          }
+        }, 1500);
+      }
+    });
+    
+    // Helper functions
+    function validateEmail(email) {
+      const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(String(email).toLowerCase());
+    }
+    
+    function showNotification(message, type) {
+      const notification = document.getElementById("notification");
+      notification.textContent = message;
+      notification.className = "notification " + type;
+      notification.classList.add("show");
+      
+      setTimeout(function() {
+        notification.classList.remove("show");
+      }, 3000);
+    }
+    
+    // Language selector
+    document.querySelector(".language-selector").addEventListener("click", function(e) {
+      e.stopPropagation();
+      const languageOptions = document.querySelector(".language-options");
+      if (languageOptions.style.display === "block") {
+        languageOptions.style.display = "none";
+      } else {
+        languageOptions.style.display = "block";
+      }
+    });
+    
+    document.querySelectorAll(".language-options a").forEach(function(link) {
+      link.addEventListener("click", function(e) {
+        e.preventDefault();
+        const lang = this.getAttribute("data-lang");
+        document.querySelector(".language-selector").innerHTML = `<i class="fas fa-globe"></i> ${lang.toUpperCase()}`;
+        document.querySelector(".language-options").style.display = "none";
+        
+        // Here you would add code to change the language
+        showNotification(`Language changed to ${this.textContent}`, "success");
+      });
+    });
+    
+    // Close language selector when clicking elsewhere
+    document.addEventListener("click", function() {
+      document.querySelector(".language-options").style.display = "none";
+    });
+    
+    // Dark mode toggle
+    document.querySelector(".dark-mode").addEventListener("click", function() {
+      document.body.classList.toggle("dark");
+      
+      if (document.body.classList.contains("dark")) {
+        this.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+        localStorage.setItem("darkMode", "enabled");
+      } else {
+        this.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
+        localStorage.setItem("darkMode", "disabled");
+      }
+    });
+    
+    // Check for saved dark mode preference
+    if (localStorage.getItem("darkMode") === "enabled") {
+      document.body.classList.add("dark");
+      document.querySelector(".dark-mode").innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+    }
+    
+    // Terms & Conditions modal (would be implemented with actual modal)
+    document.getElementById("termsLink").addEventListener("click", function(e) {
+      e.preventDefault();
+      alert("Terms & Conditions would open in a modal window here.");
+    });
+    
+    // Initialize with some demo users for testing
+    if (!localStorage.getItem("users")) {
+      const demoUsers = [
+        {
+          name: "Demo User",
+          email: "demo@example.com",
+          password: "password123",
+          registrationDate: new Date().toISOString()
+        }
+      ];
+      localStorage.setItem("users", JSON.stringify(demoUsers));
+    }
+  </script>
+</body>
+</html>

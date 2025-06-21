@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shopping Cart</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background: #f8f8f8;
+      color: #333;
+    }
+
+    h2 {
+      text-align: center;
+      color: #ff5e62;
+    }
+
+    .cart-container {
+      max-width: 1000px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      border-radius: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #ff5e62;
+      color: white;
+    }
+
+    .product-img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+
+    button {
+      padding: 8px 12px;
+      margin: 5px;
+      cursor: pointer;
+      background: #ff5e62;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background: #e04a4f;
+    }
+
+    .qty-btn {
+      padding: 4px 8px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .action-buttons, .wishlist-btn {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .coupon-section {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .price-breakdown {
+      margin-top: 20px;
+      font-size: 18px;
+      text-align: center;
+    }
+
+    .mini-cart {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #fff;
+      border: 1px solid #ddd;
+      padding: 10px;
+      border-radius: 10px;
+      width: 200px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .mini-cart h4 {
+      margin: 0 0 10px 0;
+    }
+
+    .wishlist {
+      margin-top: 30px;
+    }
+
+    .wishlist-item {
+      padding: 8px;
+      border: 1px solid #ccc;
+      margin: 5px 0;
+      border-radius: 5px;
+    }
+
+    .back-btn {
+      display: block;
+      margin: 20px auto;
+      text-align: center;
+      background: #ccc;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cart-container">
+    <h2>Shopping Cart</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th>Product</th>
+          <th>Price</th>
+          <th>Quantity</th>
+          <th>Total</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="cart-items"></tbody>
+    </table>
+
+    <div class="price-breakdown">
+      <p><strong>Original Price:</strong> $<span id="original-price">0.00</span></p>
+      <p><strong>Discount:</strong> −$<span id="discount-amount">0.00</span></p>
+      <h3>Final Price: $<span id="total-price">0.00</span></h3>
+    </div>
+
+    <div class="coupon-section">
+      <input type="text" id="coupon-code" placeholder="Enter coupon code" />
+      <button onclick="applyCoupon()">Apply Coupon</button>
+      <p id="coupon-msg" style="color: green; font-weight: bold;"></p>
+    </div>
+
+    <div class="action-buttons">
+      <button onclick="checkout()">🧾 Checkout</button>
+      <button onclick="clearCart()">🧹 Clear Cart</button>
+      <button class="back-btn" onclick="goBack()">⬅️ Continue Shopping</button>
+    </div>
+
+    <div class="wishlist">
+      <h3>💖 Wishlist</h3>
+      <div id="wishlist-items"></div>
+    </div>
+  </div>
+
+  <div class="mini-cart">
+    <h4>Mini-Cart 🛒</h4>
+    <ul id="mini-cart-list"></ul>
+  </div>
+
+  <script>
+    let discount = 0;
+
+    function loadCart() {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const cartItems = document.getElementById("cart-items");
+      const miniCart = document.getElementById("mini-cart-list");
+      const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+      const wishlistContainer = document.getElementById("wishlist-items");
+
+      let originalPrice = 0;
+      cartItems.innerHTML = "";
+      miniCart.innerHTML = "";
+      wishlistContainer.innerHTML = "";
+
+      if (cart.length === 0) {
+        cartItems.innerHTML = "<tr><td colspan='6'>🛒 Cart is empty</td></tr>";
+      }
+
+      cart.forEach((item, index) => {
+        const price = parseFloat(item.productPrice);
+        const total = price * item.quantity;
+        originalPrice += total;
+
+        cartItems.innerHTML += `
+          <tr>
+            <td><img src="${item.productImage}" class="product-img" /></td>
+            <td>${item.productName}</td>
+            <td>$${price.toFixed(2)}</td>
+            <td>
+              <button class="qty-btn" onclick="updateQuantity(${index}, -1)">−</button>
+              ${item.quantity}
+              <button class="qty-btn" onclick="updateQuantity(${index}, 1)">+</button>
+            </td>
+            <td>$${total.toFixed(2)}</td>
+            <td>
+              <button onclick="deleteFromCart(${index})">🗑️ Delete</button>
+              <button onclick="moveToWishlist(${index})">💖 Wishlist</button>
+            </td>
+          </tr>
+        `;
+
+        miniCart.innerHTML += `<li>${item.productName} × ${item.quantity}</li>`;
+      });
+
+      const discountAmount = originalPrice * discount;
+      const finalPrice = originalPrice - discountAmount;
+
+      document.getElementById("original-price").innerText = originalPrice.toFixed(2);
+      document.getElementById("discount-amount").innerText = discountAmount.toFixed(2);
+      document.getElementById("total-price").innerText = finalPrice.toFixed(2);
+
+      wishlist.forEach((item, index) => {
+        wishlistContainer.innerHTML += `
+          <div class="wishlist-item">
+            ${item.productName} - $${item.productPrice}
+            <button onclick="addToCartFromWishlist(${index})">🛒 Move to Cart</button>
+          </div>
+        `;
+      });
+    }
+
+    function updateQuantity(index, change) {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      if (cart[index]) {
+        cart[index].quantity += change;
+        if (cart[index].quantity <= 0) cart.splice(index, 1);
+        localStorage.setItem("cart", JSON.stringify(cart));
+        loadCart();
+      }
+    }
+
+    function deleteFromCart(index) {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      if (cart[index]) {
+        alert(`${cart[index].productName} removed.`);
+        cart.splice(index, 1);
+        localStorage.setItem("cart", JSON.stringify(cart));
+        loadCart();
+      }
+    }
+
+    function clearCart() {
+      if (confirm("Clear the cart?")) {
+        localStorage.removeItem("cart");
+        discount = 0;
+        loadCart();
+      }
+    }
+
+    function applyCoupon() {
+      const code = document.getElementById("coupon-code").value.trim().toUpperCase();
+      const msg = document.getElementById("coupon-msg");
+
+      if (code === "SAVE10") {
+        discount = 0.10;
+        msg.style.color = "green";
+        msg.textContent = "✅ 10% discount applied!";
+      } else if (code === "SAVE20") {
+        discount = 0.20;
+        msg.style.color = "green";
+        msg.textContent = "✅ 20% discount applied!";
+      } else {
+        discount = 0;
+        msg.style.color = "red";
+        msg.textContent = "❌ Invalid code.";
+      }
+
+      loadCart();
+    }
+
+    function moveToWishlist(index) {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+
+      if (cart[index]) {
+        wishlist.push(cart[index]);
+        cart.splice(index, 1);
+        localStorage.setItem("wishlist", JSON.stringify(wishlist));
+        localStorage.setItem("cart", JSON.stringify(cart));
+        loadCart();
+      }
+    }
+
+    function addToCartFromWishlist(index) {
+      const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+      if (wishlist[index]) {
+        cart.push(wishlist[index]);
+        wishlist.splice(index, 1);
+        localStorage.setItem("cart", JSON.stringify(cart));
+        localStorage.setItem("wishlist", JSON.stringify(wishlist));
+        loadCart();
+      }
+    }
+
+    function checkout() {
+      window.location.href = "checkout.html";
+    }
+
+    function goBack() {
+      window.location.href = "index.html";
+    }
+
+    document.addEventListener("DOMContentLoaded", loadCart);
+  </script>
+
+</body>
+</html>
